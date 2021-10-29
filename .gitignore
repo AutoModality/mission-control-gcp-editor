@@ -3,3 +3,4 @@ sample_data
 *.ai
 *.log
 build
+app/package-lock.json

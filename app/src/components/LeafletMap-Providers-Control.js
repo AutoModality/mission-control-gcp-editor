@@ -145,6 +145,7 @@
         .on(ul, 'click', e => this.onProviderItemClick(e));
 
       this.setProvider();
+      container.style.visibility = 'hidden';
 
       return container;
     },

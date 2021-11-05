@@ -30,7 +30,7 @@ class LeafletMapProviders extends Component {
   initialize(map) {
     L.control.mapProviders({
       providers: config.map_providers,
-      selected: 'osm',
+      selected: 'satellite',
       custom_desc: config.custom_description,
       initial_open: false
     }).addTo(map);

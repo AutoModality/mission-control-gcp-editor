@@ -1,6 +1,7 @@
 .images-grid {
   position: relative;
   width: 100%;
+  padding-left: 15px;
 
   .wrapper {}
 

@@ -9,7 +9,6 @@
   background: transparent;
   color: $clr-grey;
   border: 1px solid $clr-grey;
-  border-bottom: 0;
   font-size: 1rem;
   text-transform: uppercase;
   outline: 0;

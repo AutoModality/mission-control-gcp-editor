@@ -13,8 +13,8 @@ class ControlPoints extends Component {
       <li>No points...</li>
     );
 
-    return points.map((pt) => (
-      <li key={`gcp-tick-${pt.id}`} className={classNames(
+    return points.map((pt, index) => (
+      <li key={`gcp-tick-${pt.id}-${index}`} className={classNames(
         'active', 'point', { 'edit': pt.isAutomatic }
       )}/>
     ));

@@ -29,6 +29,7 @@
       border: 2px dashed #ddd;
       border-radius:  5px;
       line-height: 1;
+      cursor: pointer;
 
       & > div {
         line-height:  50px;

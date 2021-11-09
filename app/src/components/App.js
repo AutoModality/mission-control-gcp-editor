@@ -17,13 +17,13 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    WindowResizeListener.DEBOUNCE_TIME = 200;
+    // WindowResizeListener.DEBOUNCE_TIME = 200;
     this.onExportClick = this.onExportClick.bind(this);
     this.onAddHandler = this.onAddHandler.bind(this);
   }
 
   onResize(w) {
-    this.props.onWindowResize(w);
+    // this.props.onWindowResize(w);
   }
 
   getLeftDimensions() {
@@ -63,7 +63,7 @@ class App extends Component {
 
     return (
       <div className='app'>
-        <WindowResizeListener onResize={ (w) => {this.onResize(w);} } />
+        {/*<WindowResizeListener onResize={ (w) => {this.onResize(w);} } />*/}
         {imagery.gcp_list_preview &&
           <FilePreview />
         }
@@ -73,12 +73,15 @@ class App extends Component {
             sourceProjection={imagery.sourceProjection}
             controlpoints={controlpoints}
             onClick={ (evt)=>{this.onExportClick(evt);} }/>
-        }
-        <Header onExportClick={this.onExportClick} status={controlpoints.status}/>
+        }        
         <main className='main'>
           <section className='inner'>
-            <div className='panel left'>
+            <div className='panel left' ref={(el) => {this.rightPanel = el;}}>
+              <LeafletMap {...this.props}/>
+            </div>
+            <div className='panel right'>
               <div style={{ height: panelHeight }}>
+                <Header onExportClick={this.onExportClick} status={controlpoints.status}/>
 
                 <div className='image-nav-container' ref={(el) => {this.imageNavElm = el;}}>
                   <ImageNav setControlPoint={this.props.setControlPoint}/>
@@ -95,10 +98,7 @@ class App extends Component {
                   <ImagesGrid/>
                 </SlidingPanel>
               </div>
-            </div>
-            <div className='panel right' ref={(el) => {this.rightPanel = el;}}>
-              <LeafletMap {...this.props}/>
-            </div>
+            </div>            
           </section>
         </main>
       </div>

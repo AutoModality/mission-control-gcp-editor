@@ -6,7 +6,7 @@ const Header = (props) => {
 
   return (
     <header className="header">
-      <h1><span className='logo'></span>Ground Control Point Interface</h1>
+      <h3>Ground Control Point</h3>
       <ExportButton onClick={(evt)=>{props.onExportClick(evt);}} disabled={disabled}/>
     </header>
   );

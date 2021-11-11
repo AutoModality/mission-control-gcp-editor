@@ -1,7 +1,7 @@
 .sliding-panel {
   position: absolute;
   left: -100%;
-  top: 72px;
+  top: 40px;
   bottom: 0;
   width: 100%;
   background: white;

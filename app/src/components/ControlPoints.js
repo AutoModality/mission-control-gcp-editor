@@ -24,7 +24,7 @@ class ControlPoints extends Component {
     return (
       <div className='control-points-i'>
         <div>
-          <h3>Ground Control Points</h3>
+          <h3></h3>
           <ul>
             {this.renderPoints()}
           </ul>

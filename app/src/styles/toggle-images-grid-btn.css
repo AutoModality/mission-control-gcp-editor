@@ -11,6 +11,6 @@
   user-select: none;
 
   &.to-editor:hover svg {
-    fill: $clr-highlight;
+    fill: orange;
   }
 }

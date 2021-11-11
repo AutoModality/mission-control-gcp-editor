@@ -14,7 +14,7 @@
     user-select: none;
 
     &:hover svg {
-      fill: $clr-highlight;
+      fill: orange;
     }
   }
 

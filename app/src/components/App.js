@@ -75,11 +75,8 @@ class App extends Component {
             onClick={ (evt)=>{this.onExportClick(evt);} }/>
         }        
         <main className='main'>
-          <section className='inner'>
-            <div className='panel left' ref={(el) => {this.rightPanel = el;}}>
-              <LeafletMap {...this.props}/>
-            </div>
-            <div className='panel right'>
+          <section className='inner'>            
+            <div className='panel left'>
               <div style={{ height: panelHeight }}>
                 <Header onExportClick={this.onExportClick} status={controlpoints.status}/>
 
@@ -99,6 +96,9 @@ class App extends Component {
                 </SlidingPanel>
               </div>
             </div>            
+            <div className='panel right' ref={(el) => {this.rightPanel = el;}}>
+              <LeafletMap {...this.props}/>
+            </div>
           </section>
         </main>
       </div>

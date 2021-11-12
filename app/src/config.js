@@ -3,8 +3,8 @@ const config = {
     minZoom: 2,
     scrollWheelZoom: true,
     zoomControl: false,
-    initialZoom: 16,
-    initialCenter: [38.015965, -122.526599]// [30, -20]
+    initialZoom: 19,
+    initialCenter: [30, -20]
   },
   map_providers: [
     {

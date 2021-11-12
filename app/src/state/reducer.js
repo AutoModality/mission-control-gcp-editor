@@ -5,6 +5,19 @@ import controlPointReducer from './reducers/controlpoints';
 
 const INITIAL_STATE = {};
 
+function mapCenter(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case actions.SET_HOME_LOCATION:
+      return {
+        ...state,
+        homeLocation: action.location
+      }
+
+    default:
+      return state;
+  }
+}
+
 function windowSize(state = INITIAL_STATE, action) {
   switch (action.type) {
     case actions.ON_WINDOW_RESIZE:
@@ -107,6 +120,7 @@ function imagery(state = INITIAL_STATE, action) {
 }
 
 const combinedReducers = combineReducers({
+  mapCenter,
   imagery,
   controlpoints,
   windowSize,

@@ -2,6 +2,14 @@ import proj4 from 'proj4';
 import { isProjectionString } from '../common/coordinate-systems';
 import { getProj4Utm, parseUtmDescriptor } from '../common/coordinate-systems';
 
+export const SET_HOME_LOCATION = 'SET_HOME_LOCATION';
+export function setHomeLocation(location) {
+  return {
+    type: SET_HOME_LOCATION,
+    location
+  }
+}
+
 export const ON_WINDOW_RESIZE = 'ON_WINDOW_RESIZE';
 export function onWindowResize(size) {
   return {

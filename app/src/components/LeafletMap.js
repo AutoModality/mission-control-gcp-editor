@@ -68,9 +68,13 @@ class LeafletMap extends Component {
     const { onMapPositionChange } = this.props;
     if (leafletMap) return;
 
+    let homeLocation = this.props.mapCenter.length === 2 && this.props.mapCenter[0] && this.props.mapCenter[1] ? 
+                   this.props.mapCenter : config.map_options.initialCenter;
+    // console.log('Map center', homeLocation);
+
     let mapContainer = this.refs.lmap;
     let map = L.map(mapContainer, config.map_options)
-      .setView(config.map_options.initialCenter, config.map_options.initialZoom);
+      .setView(homeLocation, config.map_options.initialZoom);
 
     map.on('moveend', (evt) => {
       onMapPositionChange(map.getCenter());

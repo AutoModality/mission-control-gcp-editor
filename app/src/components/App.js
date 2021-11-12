@@ -20,6 +20,8 @@ class App extends Component {
     // WindowResizeListener.DEBOUNCE_TIME = 200;
     this.onExportClick = this.onExportClick.bind(this);
     this.onAddHandler = this.onAddHandler.bind(this);
+
+    console.log('Properties:', props);
   }
 
   onResize(w) {

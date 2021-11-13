@@ -14,8 +14,9 @@ import './styles/main.css';
 // URL query
 const url = new URL(window.location);
 let urlParams = url.searchParams;
-let missionId = urlParams.get('mid');
 
+// mission id and home location
+let missionId = urlParams.get('mid');
 let homeLocation = urlParams.get('home');
 let [lat, lon] = [38.015965, -122.526599]; // default home location: San Rafael Airport
 if(homeLocation && homeLocation.includes(',')) {
@@ -23,13 +24,17 @@ if(homeLocation && homeLocation.includes(',')) {
   lon = Number(homeLocation.split(',')[1].trim());
 }
 
-let promises = [];
-
+// gcp and images
 let gcpList = urlParams.get('gcp');
 if(gcpList) gcpList = JSON.parse(gcpList);
-// console.log(gcpList);
+else gcpList = { crs: 'WGS84', controlPoints: [] };
 
-let gcp_list = [], points = [], imageFiles = [], joins = [], highlighted = [];
+let parentScope = parent && parent.angular ? parent.angular.element('#main').scope() : undefined;
+if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) gcpList = parentScope.GCPs;
+console.log('GCP List:', gcpList);
+
+let promises = [];
+let gcp_list = [], points = [], image_files = [], joins = [], highlighted = [];
 for(let gcp of gcpList.controlPoints) {
   // construct gcp list
   gcp_list.push([Number(gcp.geo_x), Number(gcp.geo_y), Number(gcp.geo_z), Number(gcp.im_x), Number(gcp.im_y), gcp.image_name]);
@@ -62,7 +67,7 @@ async function urlToObject(url, name) {
     type: blob.type
   };
   const file = new File([blob], name, option);
-  if(!imageFiles.find(img => img.name === name)) imageFiles.push(file);
+  if(!image_files.find(img => img.name === name)) image_files.push(file);
 }
 
 Promise.all(promises).then(results => {
@@ -73,35 +78,42 @@ Promise.all(promises).then(results => {
     joins[key].push(gcp.im_x + '_' + gcp.im_y + '_' + gcp.image_name);
   }
 
-  // console.log(imageFiles);
+  // console.log(image_files);
   // console.log(joins);
-  // console.log(highlighted)
+  // console.log(highlighted);
 
-  let imagery = {
-    gcp_list_name: 'gcp_list.txt',
+  let controlPoints = { highlighted: highlighted, points: points, joins: joins };
+  let imagery =  {
+    gcp_list_name: gcpList.name,
     gcp_list: gcp_list,
-    // gcp_list_preview: true,
-    items: imageFiles,
+    gcp_list_preview: false,
+    items: image_files,
     gcp_list_text: gcpList.crs,
     sourceProjection: gcpList.crs
-  }
+  };
+
+  init(controlPoints, imagery);
+});
+
+function init(controlpoints, imagery) {
+  controlpoints = controlpoints || { highlighted: highlighted, points: points, joins: joins };
+  imagery = imagery || {};
   
   // Default state
-  const DEFAULT_STATE = {
+  let DEFAULT_STATE = {
     mapCenter: [lat, lon],
     imagepanel: { menu_active: true },
     imagery: imagery,
-    controlpoints:{ highlighted: highlighted, points: points, joins: joins }
+    controlpoints: controlpoints
   };
   
   // create store
-  const store = configureStore(DEFAULT_STATE);
+  let store = configureStore(DEFAULT_STATE);
   
   ReactDOM.render(
     <Provider store={store}>
       <WrappedApp />
     </Provider>,
     document.getElementById('root')
-  );
-
-});
+  ); 
+}

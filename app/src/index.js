@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import WrappedApp from './connectors/Wrapped';
 
 // Redux
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import configureStore from './state/store';
 
 // Styles
@@ -16,7 +16,7 @@ const url = new URL(window.location);
 let urlParams = url.searchParams;
 
 // mission id and home location
-let missionId = urlParams.get('mid');
+// let missionId = urlParams.get('mid');
 let homeLocation = urlParams.get('home');
 let [lat, lon] = [38.015965, -122.526599]; // default home location: San Rafael Airport
 if(homeLocation && homeLocation.includes(',')) {
@@ -44,13 +44,15 @@ for(let gcp of gcpList.controlPoints) {
     id: gcp.im_x + '_' + gcp.im_y + '_' + gcp.image_name,
     coord: [Number(gcp.im_x), Number(gcp.im_y)],
     img_name: gcp.image_name,
-    type: 'image'
+    type: 'image',
+    has_image: true
   });
   points.push({
     id: gcp.geo_lat + '_' + gcp.geo_lon,
     coord: [Number(gcp.geo_lat), Number(gcp.geo_lon)],
     img_name: gcp.image_name,
-    type: 'map'
+    type: 'map',
+    z: Number(gcp.geo_z)
   });
 
   // construct image file list
@@ -82,14 +84,21 @@ Promise.all(promises).then(results => {
   // console.log(joins);
   // console.log(highlighted);
 
-  let controlPoints = { highlighted: highlighted, points: points, joins: joins };
+  let controlPoints = { 
+    highlighted: highlighted, 
+    points: points, 
+    joins: joins,
+    mode: 'img_edit',
+    status: { valid: true, errors: [] }
+  };
   let imagery =  {
     gcp_list_name: gcpList.name,
     gcp_list: gcp_list,
     gcp_list_preview: false,
     items: image_files,
     gcp_list_text: gcpList.crs,
-    sourceProjection: gcpList.crs
+    sourceProjection: gcpList.crs,
+    // selected: image_files.length > 0 ? image_files[0].name : undefined
   };
 
   init(controlPoints, imagery);
@@ -107,7 +116,7 @@ function init(controlpoints, imagery) {
     controlpoints: controlpoints
   };
   
-  // create store
+  // Create store
   let store = configureStore(DEFAULT_STATE);
   
   ReactDOM.render(

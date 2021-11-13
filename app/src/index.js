@@ -102,6 +102,8 @@ Promise.all(promises).then(results => {
   };
 
   init(controlPoints, imagery);
+  let thumb = document.querySelector(".thumb");
+  if(thumb) thumb.click();
 });
 
 function init(controlpoints, imagery) {

@@ -21,7 +21,7 @@ class App extends Component {
     this.onExportClick = this.onExportClick.bind(this);
     this.onAddHandler = this.onAddHandler.bind(this);
 
-    console.log('Properties:', props);
+    console.log('App Properties:', props);
   }
 
   onResize(w) {
@@ -47,7 +47,7 @@ class App extends Component {
   onExportClick(evt) {
     evt.preventDefault();
     this.props.toggleExport();
-  }
+  }  
 
   onAddHandler(evt) {
     const { getPositions, imagery, addControlPoint } = this.props;

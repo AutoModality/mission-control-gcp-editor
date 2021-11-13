@@ -17,7 +17,7 @@ const config = {
     {
       id: 'satellite',
       label: 'Satellite',
-      url: 'https://ecn.t{s}.tiles.virtualearth.net/tiles/a{q}.jpeg?g=587&mkt=en-gb&n=z',
+      url: 'https://ecn.t{s}.tiles.virtualearth.net/tiles/h{q}.jpeg?g=587&mkt=en-US&n=z',
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors</a>',
       maxZoom: 20,
       useBing: true

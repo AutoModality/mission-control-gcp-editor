@@ -11,6 +11,9 @@ import 'ace-css/css/ace.min.css';
 import 'leaflet/dist/leaflet.css';
 import './styles/main.css';
 
+// Test data
+import testData from './common/test-data';
+
 // URL query
 const url = new URL(window.location);
 let urlParams = url.searchParams;
@@ -29,9 +32,16 @@ let gcpList = urlParams.get('gcp');
 if(gcpList) gcpList = JSON.parse(gcpList);
 else gcpList = { crs: 'WGS84', controlPoints: [] };
 
+let imageList = [];
+
 let parentScope = parent && parent.angular ? parent.angular.element('#main').scope() : undefined;
 if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) gcpList = parentScope.GCPs;
-console.log('GCP List:', gcpList);
+else gcpList = testData().gcp_list;
+// console.log('GCP list:', gcpList);
+
+if(parentScope && parentScope.DisplayedImages) imageList = parentScope.DisplayedImages;
+else imageList = testData().image_list;
+// console.log('Image list:', imageList);
 
 let promises = [];
 let gcp_list = [], points = [], image_files = [], joins = [], highlighted = [];
@@ -99,6 +109,7 @@ Promise.all(promises).then(results => {
     gcp_list_text: gcpList.crs,
     sourceProjection: gcpList.crs,
     // selected: image_files.length > 0 ? image_files[0].name : undefined
+    image_list: imageList
   };
 
   init(controlPoints, imagery);
@@ -117,7 +128,8 @@ function init(controlpoints, imagery) {
     mapCenter: [lat, lon],
     imagepanel: { menu_active: true },
     imagery: imagery,
-    controlpoints: controlpoints
+    controlpoints: controlpoints,
+    imageGrid: { active: false }
   };
   
   // Create store

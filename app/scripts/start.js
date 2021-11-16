@@ -205,7 +205,7 @@ function runDevServer(host, port, protocol) {
     // https://github.com/facebookincubator/create-react-app/issues/293
     watchOptions: {
       ignored: /node_modules/,
-      poll: true
+      // poll: 1000
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === "https",

@@ -3,6 +3,7 @@ import { WindowResizeListener } from 'react-window-resize-listener'
 import Header from './Header';
 import LeafletMap from '../connectors/LeafletMap';
 import ExportModal from './ExportModal';
+import ImagesGridModal from './ImagesGridModal';
 import FilePreview from '../connectors/FilePreview';
 import ImageEditor from '../connectors/ImageEditor';
 
@@ -48,6 +49,7 @@ class App extends Component {
     evt.preventDefault();
     this.props.toggleExport();
   }  
+  
 
   onAddHandler(evt) {
     const { getPositions, imagery, addControlPoint } = this.props;
@@ -60,7 +62,7 @@ class App extends Component {
   }
 
   render() {
-    const { exporter, controlpoints, imagery, imagepanel } = this.props;
+    const { exporter, imageGrid, controlpoints, imagery, imagepanel } = this.props;
     let [panelHeight, imageHeight] = this.getLeftDimensions();
 
     return (
@@ -75,7 +77,10 @@ class App extends Component {
             sourceProjection={imagery.sourceProjection}
             controlpoints={controlpoints}
             onClick={ (evt)=>{this.onExportClick(evt);} }/>
-        }        
+        }
+        {imageGrid.grid_active &&
+          <ImagesGridModal {...this.props} />
+        }       
         <main className='main'>
           <section className='inner'>            
             <div className='panel left'>

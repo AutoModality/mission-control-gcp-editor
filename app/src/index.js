@@ -41,6 +41,10 @@ else gcpList = testData().gcp_list;
 
 if(parentScope && parentScope.DisplayedImages) imageList = parentScope.DisplayedImages;
 else imageList = testData().image_list;
+imageList = imageList.filter(img => !img.Exif.Name.includes('Orthophoto')).sort((a,b) => {
+  if(a.Exif.Name < b.Exif.Name) return -1;
+  if(a.Exif.Name > b.Exif.Name) return 1;
+});
 // console.log('Image list:', imageList);
 
 let promises = [];
@@ -66,9 +70,12 @@ for(let gcp of gcpList.controlPoints) {
   });
 
   // construct image file list
-  if(gcp.image_url) {
+  if(gcp.image_url) {    
     let imageFetch = urlToObject(gcp.image_url, gcp.image_name);
-    promises.push(imageFetch);     
+    promises.push(imageFetch);
+    
+    let image = imageList.find(img => img.Exif.Name === gcp.image_name);
+    if(image) image.selected = true;
   }
 }
 
@@ -129,7 +136,7 @@ function init(controlpoints, imagery) {
     imagepanel: { menu_active: true },
     imagery: imagery,
     controlpoints: controlpoints,
-    imageGrid: { active: false }
+    imageGrid: { grid_active: false }
   };
   
   // Create store

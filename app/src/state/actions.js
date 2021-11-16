@@ -25,6 +25,13 @@ export function toggleExport() {
   }
 }
 
+export const TOGGLE_IMAGE_GRID = 'TOGGLE_IMAGE_GRID';
+export function toggleImageGrid() {
+  return {
+    type: TOGGLE_IMAGE_GRID
+  }
+}
+
 export const TOGGLE_MENU = 'TOGGLE_MENU';
 export function toggleMenu() {
   return {

@@ -11,6 +11,7 @@ class ImagesGetter extends Component {
     this.onTextDrop = this.onTextDrop.bind(this);
     this.submitLocalFiles = this.submitLocalFiles.bind(this);
     this.onToggle = this.onToggle.bind(this);
+    this.onChooseImagesClick = this.onChooseImagesClick.bind(this);
   }
 
   onImagesDrop(acceptedFiles, rejectedFiles) {
@@ -56,6 +57,12 @@ class ImagesGetter extends Component {
     this.images = null;
   }
 
+  onChooseImagesClick(evt) {
+    evt.stopPropagation();
+    const { toggleImageGrid } = this.props;
+    toggleImageGrid();
+  }
+
   renderFileText() {
     const { imagery } = this.props;
 
@@ -93,7 +100,10 @@ class ImagesGetter extends Component {
               activeStyle={DROPZONE_STYLE_ACTIVE}
               rejectStyle={DROPZONE_STYLE_REJECT}
               accept='image/jpeg,image/png'>
-              <div><i className="fas fa-images fa-lg fa-fw" />&nbsp;&nbsp;<b>Choose Images</b></div>
+              <div onClick={this.onChooseImagesClick}>
+                <i className="fas fa-images fa-lg fa-fw" />&nbsp;&nbsp;
+                <b>Choose Images</b>
+              </div>
             </Dropzone>
           </div>
         </aside>

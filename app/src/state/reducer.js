@@ -43,6 +43,18 @@ function exporter(state = INITIAL_STATE, action) {
   }
 }
 
+function imageGrid(state = INITIAL_STATE, action) {
+  switch (action.type) {
+    case actions.TOGGLE_IMAGE_GRID:
+      return {
+        grid_active: !state.grid_active
+      }
+
+    default:
+      return state;
+  }
+}
+
 function imagepanel(state = INITIAL_STATE, action) {
   switch (action.type) {
     case actions.TOGGLE_MENU:
@@ -125,6 +137,7 @@ const combinedReducers = combineReducers({
   controlpoints,
   windowSize,
   exporter,
+  imageGrid,
   imagepanel
 });
 

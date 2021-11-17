@@ -35,12 +35,12 @@
     border-top-right-radius: 5px;
     background: $clr-grey;
     color: $clr-white;
-    padding-left: 10px;
+    padding-left: 15px;
     text-align: left;
     height: 40px;
 
     h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin: 0;
       padding: 0;
       padding-top: 8px;

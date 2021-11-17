@@ -1,6 +1,6 @@
 .file-preview {
   textarea {
-    height: 300px;
+    min-height: 320px;
     width: 100%;
   }
 }

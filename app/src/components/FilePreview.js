@@ -9,7 +9,7 @@ export default class FilePreview extends Component {
         <div className='bk' onClick={previewGcpFileCancel}/>
         <div className='inner'>
           <div className='head'>
-            <h3>Ground control point file preview</h3>
+            <h3>Load Ground Control Points</h3>
             <span className='icon' onClick={previewGcpFileCancel}><span>&times;</span></span>
           </div>
           <div className='output'>

@@ -55,16 +55,18 @@ for(let gcp of gcpList.controlPoints) {
 
   // construct point coordinate list
   points.push({
-    id: gcp.im_x + '_' + gcp.im_y + '_' + gcp.image_name,
+    key: [gcp.geo_lat, gcp.geo_lon, gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
+    id: ['img', gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
     coord: [Number(gcp.im_x), Number(gcp.im_y)],
     img_name: gcp.image_name,
     type: 'image',
     has_image: true
   });
   points.push({
-    id: gcp.geo_lat + '_' + gcp.geo_lon,
+    key: [gcp.geo_lat, gcp.geo_lon, gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
+    id: ['map', gcp.geo_lat, gcp.geo_lon].join('_'),
     coord: [Number(gcp.geo_lat), Number(gcp.geo_lon)],
-    img_name: gcp.image_name,
+    // img_name: gcp.image_name,
     type: 'map',
     z: Number(gcp.geo_z)
   });
@@ -89,19 +91,31 @@ async function urlToObject(url, name) {
   if(!image_files.find(img => img.name === name)) image_files.push(file);
 }
 
-Promise.all(promises).then(results => {
-  // construct joins
-  for(let gcp of gcpList.controlPoints) {
-    let key = gcp.geo_lat + '_' + gcp.geo_lon;
-    joins[key] = joins[key] || [];
-    joins[key].push(gcp.im_x + '_' + gcp.im_y + '_' + gcp.image_name);
+function buildJoins(points) {
+  let joins = [];
+  let mapPoints = points.filter(p => p.type === 'map');
+  let imgPoints = points.filter(p => p.type === 'image');
+
+  let keys = new Set(mapPoints.map(p => p.id));
+  for(let k of keys) {
+    joins[k] = joins[k] || [];
+
+    for(let imgPoint of imgPoints) {
+      let mapPoint = mapPoints.find(mp => mp.key === imgPoint.key);
+      if(mapPoint && mapPoint.id === k) {
+        joins[k].push(imgPoint.id);
+      }
+    }
   }
 
-  // console.log(image_files);
-  // console.log(joins);
-  // console.log(highlighted);
+  return joins;
+}
 
-  let controlPoints = { 
+Promise.all(promises).then(results => {
+  // construct joins
+  joins = buildJoins(points);
+
+  let controlPoints = {
     highlighted: highlighted, 
     points: points, 
     joins: joins,

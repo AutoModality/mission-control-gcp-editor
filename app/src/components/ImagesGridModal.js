@@ -58,7 +58,10 @@ class ImagesGridModal extends Component {
       let image = imagery.image_list.find(img => img.Exif.Name === imageName);
       if(image) {
         let file = await this.getImageFile(image.linked_file, image.Exif.Name);
-        if(file && !imagery.items.find(img => img.name === image.Exif.Name)) imagery.items.push(file);
+        if(file && !imagery.items.find(img => img.name === image.Exif.Name)) {
+          imagery.items.push(file);
+          // console.log('Add image: ', imageName);
+        }
       }      
     }
 
@@ -67,12 +70,15 @@ class ImagesGridModal extends Component {
       // Remove joins
       let points = controlpoints.points.filter(p => p.img_name === imageName);
       for(let point of points) {
-        let p_index = controlpoints.points.findIndex(p => p.id === point.id);
+        let p_index = controlpoints.points.findIndex(p => p.id === point.id && p.img_name === imageName);
         if(p_index) controlpoints.points.splice(p_index, 1);
       }    
       // Remove image
       let index = imagery.items.findIndex(img => img.name === imageName);      
-      if(index) imagery.items.splice(index, 1);  
+      if(index) {
+        imagery.items.splice(index, 1);
+        // console.log('Remove image: ', imageName);
+      }
     }
 
     this._imagesToBeAdded = [];

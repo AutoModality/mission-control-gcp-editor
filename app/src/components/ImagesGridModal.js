@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import L from 'leaflet';
+import { shortenFileName } from '../common/utility';
 
 class ImagesGridModal extends Component {
   constructor(props) {
@@ -154,7 +155,7 @@ class ImagesGridModal extends Component {
           style={style}>          
           <div className='img'>
             <img src={src} alt={filename} />
-            <p className='img-name'>{filename}</p>
+            <p className='img-name'>{shortenFileName(filename)}</p>
           </div>
         </div>
       );

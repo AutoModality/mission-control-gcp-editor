@@ -6,7 +6,7 @@ class ControlPoints extends Component {
   renderPoints() {
     const { controlpoints, selectedImage } = this.props;
     const points = controlpoints.points.filter(p => {
-      return p.img_name === selectedImage;
+      return p.img_name === selectedImage && p.type === 'image';
     });
 
     if (!points.length) return (

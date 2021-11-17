@@ -37,7 +37,7 @@ class Directions extends Component {
             </li>
             <li>
               <span className='tc'><span className='circled'>5</span></span>
-              <span className='tc'>Generate the ground control point file.</span>
+              <span className='tc'>Save/Export the ground control points.</span>
             </li>
           </ol>
         </div>

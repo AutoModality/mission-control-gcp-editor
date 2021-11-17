@@ -119,7 +119,7 @@ class ExportModal extends Component {
         <div className='bk' onClick={(evt) => {this.props.onClick(evt);} }/>
         <div className='inner'>
           <div className='head'>
-            <h3>Ground control point file</h3>
+            <h3>Export Ground Control Points</h3>
             <span className='icon' onClick={(evt) => {this.props.onClick(evt);} }><span>&times;</span></span>
           </div>
           <div className='output'>

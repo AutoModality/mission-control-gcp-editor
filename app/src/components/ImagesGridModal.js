@@ -8,6 +8,7 @@ class ImagesGridModal extends Component {
     
     this.selectImage = this.selectImage.bind(this);    
     this.getImageFile = this.getImageFile.bind(this);
+    this.buildJoins = this.buildJoins.bind(this);
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onClose = this.onClose.bind(this); 
@@ -53,42 +54,43 @@ class ImagesGridModal extends Component {
   async onSubmit() {
     const { imagery, controlpoints, toggleImageGrid } = this.props;
     
-    // add images
+    // update images
     for(let imageName of this._imagesToBeAdded) {
       let image = imagery.image_list.find(img => img.Exif.Name === imageName);
       if(image) {
         let file = await this.getImageFile(image.linked_file, image.Exif.Name);
-        if(file && !imagery.items.find(img => img.name === image.Exif.Name)) {
-          imagery.items.push(file);
-          // console.log('Add image: ', imageName);
-        }
+        if(file && !imagery.items.find(img => img.name === image.Exif.Name)) imagery.items.push(file);
       }      
     }
 
-    // remove images and joins
+    // update joins
     for(let imageName of this._imagesToBeRemoved) {      
       // Remove joins
-      let points = controlpoints.points.filter(p => p.img_name === imageName);
-      for(let point of points) {
-        let p_index = controlpoints.points.findIndex(p => p.id === point.id && p.img_name === imageName);
-        if(p_index) controlpoints.points.splice(p_index, 1);
-      }    
-      // Remove image
-      let index = imagery.items.findIndex(img => img.name === imageName);      
-      if(index) {
-        imagery.items.splice(index, 1);
-        // console.log('Remove image: ', imageName);
-      }
-    }
+      let indexList = [];
+      let imgPoints = controlpoints.points.filter(p => p.type === 'image' && p.img_name === imageName);
+      for(let point of imgPoints) {
+        let ip_index = -1, mp_index = -1;
+        ip_index = controlpoints.points.findIndex(p => p.id === point.id);
+        if(ip_index >= 0) mp_index = controlpoints.points.findIndex(p => p.key === controlpoints.points[ip_index].key);
+        if(ip_index >= 0 && mp_index >=0) {
+          indexList.push(ip_index);
+          indexList.push(mp_index);
+        }
+      }   
 
+      for (let i = indexList.length-1; i >= 0; i--) controlpoints.points.splice(indexList[i], 1);
+
+      // Remove image
+      let img_index = imagery.items.findIndex(img => img.name === imageName);      
+      if(img_index >= 0) imagery.items.splice(img_index, 1);
+    }
+    controlpoints.joins = this.buildJoins(controlpoints.points);
+
+    // reset local lists
     this._imagesToBeAdded = [];
-    this._imagesToBeRemoved = [];
+    this._imagesToBeRemoved = [];    
     
-    this.forceUpdate();
-    imagery.items = imagery.items.sort((a, b) => {
-      if(a.name < b.name) return -1;
-      if(a.name > b.name) return 1;
-    });
+    // close modal dialog
     toggleImageGrid();
   }
 
@@ -110,6 +112,26 @@ class ImagesGridModal extends Component {
     catch(error){
       return null;
     }    
+  }
+
+  buildJoins(points) {
+    let joins = [];
+    let mapPoints = points.filter(p => p.type === 'map');
+    let imgPoints = points.filter(p => p.type === 'image');
+
+    let keys = new Set(mapPoints.map(p => p.id));
+    for(let k of keys) {
+      joins[k] = joins[k] || [];
+
+      for(let imgPoint of imgPoints) {
+        let mapPoint = mapPoints.find(mp => mp.key === imgPoint.key);
+        if(mapPoint && mapPoint.id === k) {
+          joins[k].push(imgPoint.id);
+        }
+      }
+    }
+
+    return joins;
   }
 
   renderImages() {

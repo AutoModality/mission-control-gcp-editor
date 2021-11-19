@@ -32,8 +32,10 @@ class ImagesGrid extends Component {
   }
 
   onDeleteImage(filename) {
-    const { deleteImageFile } = this.props;
+    const { deleteImageFile, imagery } = this.props;
     deleteImageFile(filename);
+    const image = imagery.image_list.find(img => img.Exif.Name === filename);
+    if(image) image.is_chosen = false;
   }
 
   renderImages() {

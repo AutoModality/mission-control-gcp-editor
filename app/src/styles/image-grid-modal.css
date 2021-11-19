@@ -76,7 +76,7 @@
     overflow-y: auto;
   }
 
-  .thumb {
+  .thumbnail {
     position: relative;
     display: inline-block;
     width: 150px;

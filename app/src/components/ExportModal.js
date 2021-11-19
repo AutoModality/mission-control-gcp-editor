@@ -6,6 +6,8 @@ import isEqual from 'lodash.isequal';
 import uniqWith from 'lodash.uniqwith';
 import { generateGcpOutput } from '../state/utils/controlpoints';
 import { getUtmZoneFromLatLng, getProj4Utm } from '../common/coordinate-systems';
+import ControlPoints from '../connectors/ControlPoints';
+import { toggleExport } from '../state/actions';
 
 class ExportModal extends Component {
   constructor(props) {
@@ -49,10 +51,29 @@ class ExportModal extends Component {
     }
   }
 
-  saveText(evt) {
+  saveToLocal(evt) {
     evt.preventDefault();
     var blob = new Blob([this.txtarea.value], { type: "text/plain;charset=utf-8" });
-    FileSaver.saveAs(blob, `gcp_file_${Date.now()}.txt`, true);
+    FileSaver.saveAs(blob, `gcp_list_${Date.now()}.txt`, true);
+  }
+
+  async saveToCloud(evt) {
+    evt.preventDefault();
+
+    const { gcpListName, controlpoints } = this.props;
+    const fileInput = controlpoints.file_input;
+
+    let blob = new Blob([this.txtarea.value], { type: "text/plain;charset=utf-8" });
+    let file = new File([blob], gcpListName || 'gcp_list.txt', { type: 'text/plain', lastModified: new Date().getTime() });
+    
+    if(fileInput) {
+      let container = new DataTransfer();
+      container.items.add(file);
+      fileInput.files = container.files;
+      let success = await controlpoints.save_gcp_to_cloud();
+      if(success) toggleExport();
+    }
+    
   }
 
   updateProps(props) {
@@ -119,7 +140,7 @@ class ExportModal extends Component {
         <div className='bk' onClick={(evt) => {this.props.onClick(evt);} }/>
         <div className='inner'>
           <div className='head'>
-            <h3>Export Ground Control Points</h3>
+            <h3>Save/Export Ground Control Points</h3>
             <span className='icon' onClick={(evt) => {this.props.onClick(evt);} }><span>&times;</span></span>
           </div>
           <div className='output'>
@@ -138,9 +159,18 @@ class ExportModal extends Component {
               </div>
               <div className='actions'>
                 <p>Copy text with <strong>Ctrl / Cmd+C</strong> or </p>
-                <button onClick={e => {this.copyText(e);}} disabled={!status.valid}>Copy</button>
+                <button onClick={e => {this.copyText(e);}} disabled={!status.valid}>
+                  <i className="fas fa-copy fa-fw"></i>&nbsp;Copy
+                </button>
                 { this.isFileSaverSupported &&
-                <button onClick={e => {this.saveText(e);}} disabled={!status.valid}>Save</button>
+                  <button onClick={e => {this.saveToLocal(e);}} disabled={!status.valid}>
+                    <i className="fas fa-download fa-fw"></i>&nbsp;Download GCP File
+                  </button>
+                }
+                {
+                  <button onClick={e => {this.saveToCloud(e);}} disabled={!status.valid || !controlpoints.file_input}>
+                    <i className="fas fa-save fa-fw"></i>&nbsp;Save to Mission
+                  </button>
                 }
               </div>
             </div>

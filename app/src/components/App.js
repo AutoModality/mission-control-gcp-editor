@@ -22,7 +22,7 @@ class App extends Component {
     this.onExportClick = this.onExportClick.bind(this);
     this.onAddHandler = this.onAddHandler.bind(this);
 
-    console.log('App Properties:', props);
+    // console.log('App Properties:', props);
   }
 
   onResize(w) {
@@ -75,6 +75,7 @@ class App extends Component {
           <ExportModal
             projection={imagery.projection}
             sourceProjection={imagery.sourceProjection}
+            gcpListName={imagery.gcp_list_name}
             controlpoints={controlpoints}
             onClick={ (evt)=>{this.onExportClick(evt);} }/>
         }

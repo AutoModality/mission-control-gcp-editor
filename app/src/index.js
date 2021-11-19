@@ -30,16 +30,21 @@ if(homeLocation && homeLocation.includes(',')) {
 }
 
 // gcp and images
-let gcpList = urlParams.get('gcp');
+let gcpList, gcpFileInput, saveGcpToCloud;
+gcpList = urlParams.get('gcp');
 if(gcpList) gcpList = JSON.parse(gcpList);
-else gcpList = { crs: 'WGS84', controlPoints: [] };
+else gcpList = { crs: 'WGS 84', name: 'gcp_list.txt', controlPoints: [] };
 
 let imageList = [], imageLoaded;
 
 let parentScope = parent && parent.angular ? parent.angular.element('#main').scope() : undefined;
-if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) gcpList = parentScope.GCPs;
+if(parentScope) gcpFileInput = parent.document.getElementById('documentFileUploadInput');
+
+if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) {
+  gcpList = parentScope.GCPs;
+  saveGcpToCloud = parentScope.SaveGcpDocument;
+}
 else if(mode == 'test') gcpList = testData().gcp_list;
-else gcpList = { crs: 'WGS 84', controlPoints: [] };
 // console.log('GCP list:', gcpList);
 
 if(parentScope && parentScope.DisplayedImages) {
@@ -50,7 +55,10 @@ if(parentScope && parentScope.DisplayedImages) {
   imageLoaded = parentScope.STATUS_IMAGERY_DATA_LOADING;
 }
 else if(mode == 'test') {
-  imageList = testData().image_list;
+  imageList = testData().image_list.filter(img => !img.Exif.Name.includes('Orthophoto')).sort((a,b) => {
+    if(a.Exif.Name < b.Exif.Name) return -1;
+    if(a.Exif.Name > b.Exif.Name) return 1;
+  });
   imageLoaded = 'done';
 }
 else {
@@ -89,7 +97,7 @@ for(let gcp of gcpList.controlPoints) {
     promises.push(imageFetch);
     
     let image = imageList.find(img => img.Exif.Name === gcp.image_name);
-    if(image) image.selected = true;
+    if(image) image.is_chosen = true;
   }
 }
 
@@ -148,6 +156,8 @@ function init(controlpoints, imagery) {
 }
 
 let controlPoints = {
+  file_input: gcpFileInput,
+  save_gcp_to_cloud: saveGcpToCloud,
   highlighted: highlighted, 
   points: points, 
   joins: buildJoins(points),
@@ -173,7 +183,7 @@ if(promises.length > 0) {
     let thumb = document.querySelector(".thumb");
     if(thumb) thumb.click();
     let fitMakrer = document.querySelector(".fit-marker");
-    if(fitMakrer) fitMakrer.click();    
+    if(fitMakrer) fitMakrer.click();
   })
 }
 else {

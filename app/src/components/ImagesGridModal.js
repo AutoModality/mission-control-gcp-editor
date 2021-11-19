@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { Component } from 'react';
 import L from 'leaflet';
 import { shortenFileName } from '../common/utility';
+import { selectImageFile } from '../state/actions';
 
 class ImagesGridModal extends Component {
   constructor(props) {
@@ -45,14 +46,13 @@ class ImagesGridModal extends Component {
       var status = imagery.image_list_loaded;
   
       if(status === 'done' || 'inprogress') {
-        // console.log(imagery.image_list, imagery.gcp_list)
         if(imagery.image_list && imagery.image_list.length > 0) {
           let images = imagery.image_list;
   
           for(let gcp of imagery.gcp_list) {
             let image = images.find(img => img.Exif.Name === gcp[5]);
             if(image) {
-              image.selected = true;
+              image.is_chosen = true;
               let imageFile = await this.getImageFile(image.linked_file, image.Exif.Name);
               if(imageFile && !imageFiles.find(img => img.name === image.Exif.Name)) imageFiles.push(imageFile);
             }
@@ -62,36 +62,44 @@ class ImagesGridModal extends Component {
       
       if(status === 'done') {
         imagery.items = imageFiles;
-        toggleImageGrid(); toggleImageGrid();
-        
-        let fitMakrer = document.querySelector(".fit-marker");
-        if(fitMakrer) fitMakrer.click();
+        toggleImageGrid(); toggleImageGrid(); 
+
         let thumb = document.querySelector(".thumb");
         if(thumb) thumb.click();
+        let fitMakrer = document.querySelector(".fit-marker");
+        if(fitMakrer) fitMakrer.click();
 
         clearInterval(monitor);
-        console.log('Loading images ... Done.');
+        // console.log('Loading images ... Done.');
       }
 
-      console.log('Loading images ...');
+      // console.log('Loading images ...');
       
     }, 2000);
   }
 
   selectImage(imageId) {
     const { imagery } = this.props;    
-    let selectedImages = imagery.items.map(img => img.name);
+    let chosenImages = imagery.items;
     let image = imagery.image_list.find(img => img.id === imageId);
 
-    if(image) {      
-      image.selected = !image.selected;
-      if(image.selected) {        
-        if(!selectedImages.includes(image.Exif.Name)) this._imagesToBeAdded.push(image.Exif.Name);
+    if(image) {
+      image.is_chosen = !image.is_chosen;
+      if(image.is_chosen) {        
+        if(!chosenImages.find(im => im.name === image.Exif.Name) && !this._imagesToBeAdded.includes(image.Exif.Name)) 
+          this._imagesToBeAdded.push(image.Exif.Name);
+        if(this._imagesToBeRemoved.includes(image.Exif.Name))
+          this._imagesToBeRemoved.splice(this._imagesToBeRemoved.findIndex(image.Exif.Name), 1);
       }
       else {
-        if(selectedImages.includes(image.Exif.Name)) this._imagesToBeRemoved.push(image.Exif.Name);
+        if(chosenImages.find(im => im.name === image.Exif.Name) && !this._imagesToBeRemoved.includes(image.Exif.Name)) 
+          this._imagesToBeRemoved.push(image.Exif.Name);
+        if(this._imagesToBeAdded.includes(image.Exif.Name))
+          this._imagesToBeAdded.splice(this._imagesToBeAdded.findIndex(image.Exif.Name), 1);
       }
     }
+
+    // console.log(this._imagesToBeAdded, this._imagesToBeRemoved)
 
     this.forceUpdate();
   }
@@ -182,19 +190,18 @@ class ImagesGridModal extends Component {
   renderImages() {
     const { imagery } = this.props;
 
-    let images = imagery.image_list || [];    
+    let allImages = imagery.image_list || [];
 
-    return images.map(img => {
+    return allImages.map(img => {
       let src = img.thumbnail;
       let filename = img.Exif.Name;
       let style = {
-        border: img.selected && '2px solid red',
-        // cursor: img.selected && 'default'
+        border: img.is_chosen ? '2px solid red' : '',
       };
 
       return (
         <div key={img.id}
-          className={classNames('thumb', { 'no-img': !src })} 
+          className={classNames('thumbnail', { 'no-img': !src })} 
           onClick={ (evt) => {this.selectImage(img.id);} }
           style={style}>          
           <div className='img'>

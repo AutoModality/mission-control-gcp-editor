@@ -18,6 +18,8 @@ import testData from './common/test-data';
 const url = new URL(window.location);
 let urlParams = url.searchParams;
 
+let mode = (urlParams.get('mode') || '').toLowerCase();
+
 // mission id and home location
 // let missionId = urlParams.get('mid');
 let homeLocation = urlParams.get('home');
@@ -32,19 +34,29 @@ let gcpList = urlParams.get('gcp');
 if(gcpList) gcpList = JSON.parse(gcpList);
 else gcpList = { crs: 'WGS84', controlPoints: [] };
 
-let imageList = [];
+let imageList = [], imageLoaded;
 
 let parentScope = parent && parent.angular ? parent.angular.element('#main').scope() : undefined;
 if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) gcpList = parentScope.GCPs;
-else gcpList = testData().gcp_list;
+else if(mode == 'test') gcpList = testData().gcp_list;
+else gcpList = { crs: 'WGS 84', controlPoints: [] };
 // console.log('GCP list:', gcpList);
 
-if(parentScope && parentScope.DisplayedImages) imageList = parentScope.DisplayedImages;
-else imageList = testData().image_list;
-imageList = imageList.filter(img => !img.Exif.Name.includes('Orthophoto')).sort((a,b) => {
-  if(a.Exif.Name < b.Exif.Name) return -1;
-  if(a.Exif.Name > b.Exif.Name) return 1;
-});
+if(parentScope && parentScope.DisplayedImages) {
+  imageList = parentScope.DisplayedImages.filter(img => !img.Exif.Name.includes('Orthophoto')).sort((a,b) => {
+    if(a.Exif.Name < b.Exif.Name) return -1;
+    if(a.Exif.Name > b.Exif.Name) return 1;
+  });
+  imageLoaded = parentScope.STATUS_IMAGERY_DATA_LOADING;
+}
+else if(mode == 'test') {
+  imageList = testData().image_list;
+  imageLoaded = 'done';
+}
+else {
+  imageList = [];
+  imageLoaded = 'done';
+}
 // console.log('Image list:', imageList);
 
 let promises = [];
@@ -73,7 +85,7 @@ for(let gcp of gcpList.controlPoints) {
 
   // construct image file list
   if(gcp.image_url) {    
-    let imageFetch = urlToObject(gcp.image_url, gcp.image_name);
+    let imageFetch = getImageFile(gcp.image_url, gcp.image_name);
     promises.push(imageFetch);
     
     let image = imageList.find(img => img.Exif.Name === gcp.image_name);
@@ -81,7 +93,7 @@ for(let gcp of gcpList.controlPoints) {
   }
 }
 
-async function urlToObject(url, name) {
+async function getImageFile(url, name) {
   const response = await fetch(url);
   const blob = await response.blob();
   let option = {
@@ -111,35 +123,6 @@ function buildJoins(points) {
   return joins;
 }
 
-Promise.all(promises).then(results => {
-  // construct joins
-  joins = buildJoins(points);
-
-  let controlPoints = {
-    highlighted: highlighted, 
-    points: points, 
-    joins: joins,
-    mode: 'img_edit',
-    status: { valid: true, errors: [] }
-  };
-  let imagery =  {
-    gcp_list_name: gcpList.name,
-    gcp_list: gcp_list,
-    gcp_list_preview: false,
-    items: image_files,
-    gcp_list_text: gcpList.crs,
-    sourceProjection: gcpList.crs,
-    // selected: image_files.length > 0 ? image_files[0].name : undefined
-    image_list: imageList
-  };
-
-  init(controlPoints, imagery);
-  let thumb = document.querySelector(".thumb");
-  if(thumb) thumb.click();
-  let fitMakrer = document.querySelector(".fit-marker");
-  if(fitMakrer) fitMakrer.click();
-});
-
 function init(controlpoints, imagery) {
   controlpoints = controlpoints || { highlighted: highlighted, points: points, joins: joins };
   imagery = imagery || {};
@@ -161,5 +144,40 @@ function init(controlpoints, imagery) {
       <WrappedApp />
     </Provider>,
     document.getElementById('root')
-  ); 
+  );  
 }
+
+let controlPoints = {
+  highlighted: highlighted, 
+  points: points, 
+  joins: buildJoins(points),
+  mode: 'img_edit',
+  status: { valid: true, errors: [] }
+};
+let imagery =  {
+  gcp_list_name: gcpList.name,
+  gcp_list: gcp_list,
+  gcp_list_preview: false,
+  items: image_files,
+  gcp_list_text: gcpList.crs,
+  sourceProjection: gcpList.crs,
+  image_list: imageList,
+  image_list_loaded: imageLoaded
+};
+
+if(promises.length > 0) {
+  Promise.all(promises).then(res => {
+    // wait for completion of loading images
+    init(controlPoints, imagery);
+
+    let thumb = document.querySelector(".thumb");
+    if(thumb) thumb.click();
+    let fitMakrer = document.querySelector(".fit-marker");
+    if(fitMakrer) fitMakrer.click();    
+  })
+}
+else {
+  init(controlPoints, imagery);
+}
+
+

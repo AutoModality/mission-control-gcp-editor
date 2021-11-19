@@ -6,7 +6,8 @@ import { shortenFileName } from '../common/utility';
 class ImagesGridModal extends Component {
   constructor(props) {
     super(props);
-    
+
+    this.monitorImages = this.monitorImages.bind(this);    
     this.selectImage = this.selectImage.bind(this);    
     this.getImageFile = this.getImageFile.bind(this);
     this.buildJoins = this.buildJoins.bind(this);
@@ -16,6 +17,8 @@ class ImagesGridModal extends Component {
     
     this._imagesToBeAdded = [];
     this._imagesToBeRemoved = [];
+
+    // this.monitorImages();
   }
 
   componentDidMount() {
@@ -33,6 +36,47 @@ class ImagesGridModal extends Component {
   componentWillReceiveProps(nextProps) {
     this.updateProps(nextProps);
   }  
+
+  monitorImages() {
+    const { imagery, toggleImageGrid } = this.props;
+    let imageFiles = [];
+
+    let monitor = setInterval(async () => {
+      var status = imagery.image_list_loaded;
+  
+      if(status === 'done' || 'inprogress') {
+        // console.log(imagery.image_list, imagery.gcp_list)
+        if(imagery.image_list && imagery.image_list.length > 0) {
+          let images = imagery.image_list;
+  
+          for(let gcp of imagery.gcp_list) {
+            let image = images.find(img => img.Exif.Name === gcp[5]);
+            if(image) {
+              image.selected = true;
+              let imageFile = await this.getImageFile(image.linked_file, image.Exif.Name);
+              if(imageFile && !imageFiles.find(img => img.name === image.Exif.Name)) imageFiles.push(imageFile);
+            }
+          }
+        }
+      }
+      
+      if(status === 'done') {
+        imagery.items = imageFiles;
+        toggleImageGrid(); toggleImageGrid();
+        
+        let fitMakrer = document.querySelector(".fit-marker");
+        if(fitMakrer) fitMakrer.click();
+        let thumb = document.querySelector(".thumb");
+        if(thumb) thumb.click();
+
+        clearInterval(monitor);
+        console.log('Loading images ... Done.');
+      }
+
+      console.log('Loading images ...');
+      
+    }, 2000);
+  }
 
   selectImage(imageId) {
     const { imagery } = this.props;    
@@ -164,9 +208,12 @@ class ImagesGridModal extends Component {
 
   render() {
     let props = this.props;
+    let style = {
+      display: props.imageGrid.grid_active ? '' : 'none'
+    };
 
     return (
-      <div className={classNames('image-grid-modal')}>
+      <div className={classNames('image-grid-modal')} style={style}>
         <div className='bk' onClick={(evt) => {this.onClose()} }/>
         <div className='inner'>
           <div className='head'>

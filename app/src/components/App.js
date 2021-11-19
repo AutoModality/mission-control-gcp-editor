@@ -78,7 +78,7 @@ class App extends Component {
             controlpoints={controlpoints}
             onClick={ (evt)=>{this.onExportClick(evt);} }/>
         }
-        {imageGrid.grid_active &&
+        {
           <ImagesGridModal {...this.props} />
         }       
         <main className='main'>

@@ -175,10 +175,13 @@ let imagery =  {
   image_list_loaded: imageLoaded
 };
 
+let loading = document.getElementById('loading');
+if(loading) loading.style.display = 'block';
 if(promises.length > 0) {
   Promise.all(promises).then(res => {
     // wait for completion of loading images
     init(controlPoints, imagery);
+    if(loading) loading.style.display = 'none';
 
     let thumb = document.querySelector(".thumb");
     if(thumb) thumb.click();
@@ -188,6 +191,7 @@ if(promises.length > 0) {
 }
 else {
   init(controlPoints, imagery);
+  if(loading) loading.style.display = 'none';
 }
 
 

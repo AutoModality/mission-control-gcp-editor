@@ -140,7 +140,7 @@ class ImagePanZoom extends Component {
   }
 
   onWheel(evt) {
-    evt.preventDefault();
+    if(evt.cancelable) evt.preventDefault();
 
     const { scrollWheelZoom } = this.props;
     if (!scrollWheelZoom) return;

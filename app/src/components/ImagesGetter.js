@@ -77,6 +77,7 @@ class ImagesGetter extends Component {
 
   render() {
     let gcpFileDropText = this.renderFileText();
+    const { imagery } = this.props;
 
     return (
       <div className='images-getter'>
@@ -102,7 +103,9 @@ class ImagesGetter extends Component {
               accept='image/jpeg,image/png'>
               <div onClick={this.onChooseImagesClick}>
                 <i className="fas fa-images fa-lg fa-fw" />&nbsp;&nbsp;
-                <b>Choose Images</b>
+                <b>Choose Images&nbsp;
+                {imagery.image_list.length > 0 && `(${imagery.items.length}/${imagery.image_list.length})`}
+                </b> 
               </div>
             </Dropzone>
           </div>

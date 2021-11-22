@@ -478,7 +478,7 @@ class ImagePanZoom extends Component {
       const top = this.el.scrollTop;
 
       const [nx, ny] = this.transformPosition(left + x, top + y, true);
-      addAutomaticControlPoint([nx, ny], image.name, true);
+      // addAutomaticControlPoint([nx, ny], image.name, true);
     }
   }
 

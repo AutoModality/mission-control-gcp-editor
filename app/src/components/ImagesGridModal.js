@@ -39,18 +39,18 @@ class ImagesGridModal extends Component {
   }  
 
   monitorImages() {
-    const { imagery, toggleImageGrid } = this.props;
+    const { controlpoints, imagery, toggleImageGrid } = this.props;
     let imageFiles = [];
 
     let monitor = setInterval(async () => {
       var status = imagery.image_list_loaded;
   
       if(status === 'done' || 'inprogress') {
-        if(imagery.image_list && imagery.image_list.length > 0) {
+        if(imagery.image_list && imagery.image_list.length > 0 && controlpoints.points.length > 0) {
           let images = imagery.image_list;
   
-          for(let gcp of imagery.gcp_list) {
-            let image = images.find(img => img.Exif.Name === gcp[5]);
+          for(let point of controlpoints.points.filter(p => p.type === 'image')) {
+            let image = images.find(img => img.Exif.Name === point.img_name);
             if(image) {
               image.is_chosen = true;
               let imageFile = await this.getImageFile(image.linked_file, image.Exif.Name);
@@ -62,7 +62,7 @@ class ImagesGridModal extends Component {
       
       if(status === 'done') {
         imagery.items = imageFiles;
-        toggleImageGrid(); toggleImageGrid(); 
+        toggleImageGrid(); toggleImageGrid();
 
         let thumb = document.querySelector(".thumb");
         if(thumb) thumb.click();

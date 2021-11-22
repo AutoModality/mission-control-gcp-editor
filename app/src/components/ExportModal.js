@@ -64,7 +64,7 @@ class ExportModal extends Component {
     const fileInput = controlpoints.file_input;
 
     let blob = new Blob([this.txtarea.value], { type: "text/plain;charset=utf-8" });
-    let file = new File([blob], gcpListName || 'gcp_list.txt', { type: 'text/plain', lastModified: new Date().getTime() });
+    let file = new File([blob], `gcp_list_${Date.now()}.txt`, { type: 'text/plain', lastModified: new Date().getTime() });
     
     if(fileInput) {
       let container = new DataTransfer();

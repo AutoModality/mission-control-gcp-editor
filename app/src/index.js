@@ -69,16 +69,22 @@ else {
 
 let promises = [];
 let gcp_list = [], points = [], image_files = [], joins = [], highlighted = [];
-for(let gcp of gcpList.controlPoints) {
-  // construct gcp list
-  gcp_list.push([Number(gcp.geo_x), Number(gcp.geo_y), Number(gcp.geo_z), Number(gcp.im_x), Number(gcp.im_y), gcp.image_name]);
 
+// construct GCP list
+if(gcpList.controlPoints.length > 0) {
+  let gcpNames = new Set(gcpList.controlPoints.map(p => p.gcp_name));
+  for(let gcpName of gcpNames) {
+    let gcp = gcpList.controlPoints.find(p => p.gcp_name === gcpName);
+    if(gcp) gcp_list.push([gcpName, Number(gcp.geo_x), Number(gcp.geo_y), Number(gcp.geo_z)]);
+  }
+}
+for(let gcp of gcpList.controlPoints) {
   // construct point coordinate list
   points.push({
     key: [gcp.geo_lat, gcp.geo_lon, gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
     id: ['img', gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
     coord: [Number(gcp.im_x), Number(gcp.im_y)],
-    img_name: gcp.image_name,
+    img_name: gcp.image_name,    
     type: 'image',
     has_image: true
   });
@@ -86,7 +92,7 @@ for(let gcp of gcpList.controlPoints) {
     key: [gcp.geo_lat, gcp.geo_lon, gcp.im_x, gcp.im_y, gcp.image_name].join('_'),
     id: ['map', gcp.geo_lat, gcp.geo_lon].join('_'),
     coord: [Number(gcp.geo_lat), Number(gcp.geo_lon)],
-    // img_name: gcp.image_name,
+    label: gcp.gcp_name,
     type: 'map',
     z: Number(gcp.geo_z)
   });

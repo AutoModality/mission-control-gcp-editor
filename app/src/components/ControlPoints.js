@@ -10,7 +10,7 @@ class ControlPoints extends Component {
     });
 
     if (!points.length) return (
-      <li>No points...</li>
+      <li>No Points ...</li>
     );
 
     return points.map((pt, index) => (
@@ -21,10 +21,11 @@ class ControlPoints extends Component {
   }
 
   render() {
+    const { selectedImage } = this.props;
     return (
       <div className='control-points-i'>
         <div>
-          <h3></h3>
+          <h3>{selectedImage}</h3>
           <ul>
             {this.renderPoints()}
           </ul>

@@ -116,7 +116,7 @@ export const validate = (points, joins) => {
   if (points.length === 0){
     errors.push('There are no ground control points to export.');
   }else if (points.length < 15) {
-    errors.push('A ground control point file should have a minimum of 15 points. There needs to be 5 control objects and each control object must have 3 image points referenced. Please see this <a href="https://github.com/OpenDroneMap/OpenDroneMap/wiki/Running-OpenDroneMap#running-odm-with-ground-control" target="_blank">article</a> for more information.');
+    errors.push('A ground control point file should have a minimum of 15 points. There needs to be 5 control objects and each control object must have 3 image points referenced.');
   }
 
   let mapPoints = points.filter(pt => pt.type === CP_TYPES.MAP);
@@ -124,8 +124,8 @@ export const validate = (points, joins) => {
   let joinKeys = Object.keys(joins);
   let validObjects = joinKeys.filter(d => d.length >= 3);
 
-  if (imgPointsLength < 9) {
-    errors.push('It\'s recommended to have at least 10 image points.');
+  if (imgPointsLength < 10) {
+    errors.push('It\'s recommended to have at least 10 image points. You currently have defined ' + imgPointsLength + ' image points.');
   }
 
   if (mapPoints.length < 5) {
@@ -137,7 +137,7 @@ export const validate = (points, joins) => {
   }
 
   return {
-    valid: true,
+    valid: !errors.length > 0 ? true : false,
     errors
   }
 };

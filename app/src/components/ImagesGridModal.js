@@ -231,8 +231,12 @@ class ImagesGridModal extends Component {
             {this.renderImages()}
           </div>
           <div className='actions'>
-            <button onClick={(evt) => {this.onSubmit()}}>Confirm</button>
-            <button onClick={(evt) => {this.onClose()}}>Cancel</button>
+            <button onClick={(evt) => {this.onSubmit()}}>
+              <i className="fas fa-check fa-fw"></i>&nbsp;Confirm
+            </button>
+            <button onClick={(evt) => {this.onClose()}}>
+              <i className="fas fa-ban fa-fw"></i>&nbsp;Cancel
+            </button>
           </div>
         </div>
       </div>

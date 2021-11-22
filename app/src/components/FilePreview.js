@@ -19,12 +19,15 @@ export default class FilePreview extends Component {
               </div>
             )}
             <textarea value={previewText} readOnly></textarea>
-            <div className='actions'>
-              <button onClick={previewGcpFileCancel}>Cancel</button>
+            <div className='actions'>              
               <button
                 disabled={errors.length > 0}
-                onClick={receiveGcpFile}
-              >Load</button>
+                onClick={receiveGcpFile}>
+                <i className="fas fa-folder-open fa-fw"></i>&nbsp;Load
+              </button>
+              <button onClick={previewGcpFileCancel}>
+                <i className="fas fa-ban fa-fw"></i>&nbsp;Cancel
+              </button>
             </div>
           </div>
         </div>

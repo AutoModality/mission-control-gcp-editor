@@ -1,5 +1,5 @@
 const gcp_list = {
-    "crs": "+proj=utm +zone=10 +ellps=WGS84 +datum=WGS84 +units=m +no_defs\t\t",
+    "crs": "+proj=utm +zone=10 +ellps=WGS84 +datum=WGS84 +units=m +no_defs",
     "controlPoints": [
         {
             "id": 1,
@@ -9,6 +9,7 @@ const gcp_list = {
             "im_x": 1312.35,
             "im_y": 1158.66,
             "image_name": "DJI_0005.JPG",
+            "gcp_name": "GCP-1",
             "geo_lat": "38.017455",
             "geo_lon": "-122.534887",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/421DF3BE7FE643ED92F3D694100C4824/DJI_0005.JPG"
@@ -21,6 +22,7 @@ const gcp_list = {
             "im_x": 1030.58,
             "im_y": 933.8,
             "image_name": "DJI_0006.JPG",
+            "gcp_name": "GCP-1",
             "geo_lat": "38.017455",
             "geo_lon": "-122.534887",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0006.JPG"
@@ -33,6 +35,7 @@ const gcp_list = {
             "im_x": 1555.57,
             "im_y": 981.09,
             "image_name": "DJI_0062.JPG",
+            "gcp_name": "GCP-1",
             "geo_lat": "38.017455",
             "geo_lon": "-122.534887",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0062.JPG"
@@ -45,6 +48,7 @@ const gcp_list = {
             "im_x": 4336.2,
             "im_y": 1120.61,
             "image_name": "DJI_0005.JPG",
+            "gcp_name": "GCP-2",
             "geo_lat": "38.017427",
             "geo_lon": "-122.534910",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/421DF3BE7FE643ED92F3D694100C4824/DJI_0005.JPG"
@@ -57,6 +61,7 @@ const gcp_list = {
             "im_x": 4421.03,
             "im_y": 960.19,
             "image_name": "DJI_0006.JPG",
+            "gcp_name": "GCP-2",
             "geo_lat": "38.017427",
             "geo_lon": "-122.534910",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0006.JPG"
@@ -69,6 +74,7 @@ const gcp_list = {
             "im_x": 4309.34,
             "im_y": 1038.54,
             "image_name": "DJI_0062.JPG",
+            "gcp_name": "GCP-2",
             "geo_lat": "38.017427",
             "geo_lon": "-122.534910",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0062.JPG"
@@ -81,6 +87,7 @@ const gcp_list = {
             "im_x": 4477.95,
             "im_y": 1120.61,
             "image_name": "DJI_0005.JPG",
+            "gcp_name": "GCP-3",
             "geo_lat": "38.017425",
             "geo_lon": "-122.534913",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/421DF3BE7FE643ED92F3D694100C4824/DJI_0005.JPG"
@@ -93,6 +100,7 @@ const gcp_list = {
             "im_x": 4578.06,
             "im_y": 957.8,
             "image_name": "DJI_0006.JPG",
+            "gcp_name": "GCP-3",
             "geo_lat": "38.017425",
             "geo_lon": "-122.534913",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0006.JPG"
@@ -105,6 +113,7 @@ const gcp_list = {
             "im_x": 4451.09,
             "im_y": 1049.73,
             "image_name": "DJI_0062.JPG",
+            "gcp_name": "GCP-3",
             "geo_lat": "38.017425",
             "geo_lon": "-122.534913",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0062.JPG"
@@ -117,6 +126,7 @@ const gcp_list = {
             "im_x": 832.66,
             "im_y": 1543.25,
             "image_name": "DJI_0093.JPG",
+            "gcp_name": "GCP-4",
             "geo_lat": "38.017350",
             "geo_lon": "-122.534763",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0093.JPG"
@@ -129,6 +139,7 @@ const gcp_list = {
             "im_x": 969.9,
             "im_y": 1337.72,
             "image_name": "DJI_0092.JPG",
+            "gcp_name": "GCP-4",
             "geo_lat": "38.017350",
             "geo_lon": "-122.534763",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/421DF3BE7FE643ED92F3D694100C4824/DJI_0092.JPG"
@@ -141,6 +152,7 @@ const gcp_list = {
             "im_x": 197.71,
             "im_y": 1375.02,
             "image_name": "DJI_0095.JPG",
+            "gcp_name": "GCP-4",
             "geo_lat": "38.017350",
             "geo_lon": "-122.534763",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0095.JPG"
@@ -153,6 +165,7 @@ const gcp_list = {
             "im_x": 3772.39,
             "im_y": 1232.14,
             "image_name": "DJI_0095.JPG",
+            "gcp_name": "GCP-5",
             "geo_lat": "38.017376",
             "geo_lon": "-122.534741",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0095.JPG"
@@ -165,6 +178,7 @@ const gcp_list = {
             "im_x": 4551.4,
             "im_y": 1387.36,
             "image_name": "DJI_0093.JPG",
+            "gcp_name": "GCP-5",
             "geo_lat": "38.017376",
             "geo_lon": "-122.534741",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/BDBC843BA06B4C76936E2DD4E487BFBE/DJI_0093.JPG"
@@ -177,6 +191,7 @@ const gcp_list = {
             "im_x": 4260.92,
             "im_y": 1143.4,
             "image_name": "DJI_0092.JPG",
+            "gcp_name": "GCP-5",
             "geo_lat": "38.017376",
             "geo_lon": "-122.534741",
             "image_url": "https://api-test.ammc.automodality.com//Vaults/AMMC/Missions/1B37294BCBEC48FCB794AF6045825CE3/Payloads/Images/421DF3BE7FE643ED92F3D694100C4824/DJI_0092.JPG"

@@ -38,12 +38,12 @@ else gcpList = { crs: 'WGS 84', name: 'gcp_list.txt', controlPoints: [] };
 let imageList = [], imageLoaded;
 
 let parentScope = parent && parent.angular ? parent.angular.element('#main').scope() : undefined;
-if(parentScope) gcpFileInput = parent.document.getElementById('documentFileUploadInput');
-
-if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) {
-  gcpList = parentScope.GCPs;
+if(parentScope) {
+  gcpFileInput = parent.document.getElementById('documentFileUploadInput');
   saveGcpToCloud = parentScope.SaveGcpDocument;
 }
+
+if(parentScope && parentScope.GCPs && parentScope.DisplayedImages) gcpList = parentScope.GCPs;  
 else if(mode == 'test') gcpList = testData().gcp_list;
 // console.log('GCP list:', gcpList);
 

@@ -89,13 +89,13 @@ class ImagesGridModal extends Component {
         if(!chosenImages.find(im => im.name === image.Exif.Name) && !this._imagesToBeAdded.includes(image.Exif.Name)) 
           this._imagesToBeAdded.push(image.Exif.Name);
         if(this._imagesToBeRemoved.includes(image.Exif.Name))
-          this._imagesToBeRemoved.splice(this._imagesToBeRemoved.findIndex(image.Exif.Name), 1);
+          this._imagesToBeRemoved.splice(this._imagesToBeRemoved.indexOf(image.Exif.Name), 1);
       }
       else {
         if(chosenImages.find(im => im.name === image.Exif.Name) && !this._imagesToBeRemoved.includes(image.Exif.Name)) 
           this._imagesToBeRemoved.push(image.Exif.Name);
         if(this._imagesToBeAdded.includes(image.Exif.Name))
-          this._imagesToBeAdded.splice(this._imagesToBeAdded.findIndex(image.Exif.Name), 1);
+          this._imagesToBeAdded.splice(this._imagesToBeAdded.indexOf(image.Exif.Name), 1);
       }
     }
 

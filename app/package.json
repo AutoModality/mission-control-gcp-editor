@@ -79,7 +79,7 @@
   },
   "license": "BSD",
   "main": "n/a",
-  "homepage": "/",
+  "homepage": "/Apps/GCPEditor/",
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",

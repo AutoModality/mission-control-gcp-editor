@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ImageLoader from 'blueimp-load-image';
+import Tiff from 'tiff.js';
 
 class Image extends Component {
 
@@ -30,12 +31,24 @@ class Image extends Component {
     this.onInternalImageLoad = this.onInternalImageLoad.bind(this);
   }
 
-  loadImage(src) {
+  async loadImage(src) {
     if (!src) return;
+
+    let imgData; // file, blob, or url
+    if(src.type === 'image/tiff') {
+      const buffer = await src.arrayBuffer();
+      const tiff = new Tiff({
+        buffer: buffer
+      });
+      imgData = tiff.toDataURL();
+    } else {
+      imgData = src;
+    }
+
     const { onImageLoad } = this.props;
     const needsRevoking = (ImageLoader.isInstanceOf('Blob', src) || ImageLoader.isInstanceOf('File', src));
     ImageLoader(
-        src,
+        imgData,
         function (img, meta) {
 
           if (typeof onImageLoad === 'function') {

@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import ImageLoader from 'blueimp-load-image';
 import { shortenFileName } from '../common/utility';
+import Tiff from 'tiff.js';
 
 class ImagesGridThumb extends Component {
   static propTypes = {
@@ -20,9 +21,20 @@ class ImagesGridThumb extends Component {
     points: 0
   }
 
-  loadImage(src) {
+  async loadImage(src) {
     if (!src) return;
     let imgElm = this.thumbImage;
+
+    let imgData; // file, blob, or url
+    if(src.type === 'image/tiff') {
+      const buffer = await src.arrayBuffer();
+      const tiff = new Tiff({
+        buffer: buffer
+      });
+      imgData = tiff.toDataURL();
+    } else {
+      imgData = src;
+    }
 
     let options = {
       canvas: true,
@@ -34,7 +46,7 @@ class ImagesGridThumb extends Component {
     };
 
     ImageLoader(
-      src,
+      imgData,
       function (canvas) {
         imgElm.style.backgroundImage = `url(${canvas.toDataURL('image/jpeg', 0.5)})`;
       },
